@@ -1,9 +1,9 @@
-﻿using CefSharp.MinimalExample.Wpf.Mvvm;
-using CefSharp.Wpf;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
+using CefSharp.Wpf;
+using CefSharp.MinimalExample.Wpf.Mvvm;
 
-namespace CefSharp.MinimalExample.Wpf.Views.Main
+namespace CefSharp.MinimalExample.Wpf.ViewModels
 {
     public class MainViewModel
     {
