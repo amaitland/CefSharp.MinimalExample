@@ -9,6 +9,9 @@ namespace CefSharp.MinimalExample.Wpf.Views
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+
+            const string html = "<html><body><h2>Hi There!</h2></body></html>";
+            Browser.LoadHtml(html, "http://test/html");
         }
     }
 }
