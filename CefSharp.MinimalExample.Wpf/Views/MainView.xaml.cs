@@ -9,6 +9,8 @@ namespace CefSharp.MinimalExample.Wpf.Views
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+
+            webBrowser.LifeSpanHandler = new LifeSpanHandler();
         }
     }
 }
