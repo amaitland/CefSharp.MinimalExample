@@ -26,6 +26,8 @@ namespace CefSharp.MinimalExample.WinForms
             };
             toolStripContainer.ContentPanel.Controls.Add(browser);
 
+            browser.RequestHandler = new RequestHandler();
+
             browser.NavStateChanged += OnBrowserNavStateChanged;
             browser.ConsoleMessage += OnBrowserConsoleMessage;
             browser.StatusMessage += OnBrowserStatusMessage;
