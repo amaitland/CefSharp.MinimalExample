@@ -6,6 +6,8 @@ namespace CefSharp.MinimalExample.Wpf
     {
         public App()
         {
+            CefSharpSettings.WcfEnabled = false;
+
             Cef.Initialize(new CefSettings());
         }
     }
