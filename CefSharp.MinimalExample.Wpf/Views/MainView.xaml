@@ -13,9 +13,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <cefSharp:ChromiumWebBrowser Grid.Row="0"
-                          Address="http://www.google.com"
+                          Address="http://cefsharp.test/string.html"
                           WebBrowser="{Binding WebBrowser, Mode=OneWayToSource}"
-                          Title="{Binding Title, Mode=TwoWay}" />
+                          Title="{Binding Title, Mode=TwoWay}"
+                          x:Name="BrowserControl" />
         <StatusBar Grid.Row="1">
             <ProgressBar HorizontalAlignment="Right"
                          IsIndeterminate="{Binding WebBrowser.IsLoading}"
