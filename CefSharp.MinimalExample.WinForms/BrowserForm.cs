@@ -31,10 +31,35 @@ namespace CefSharp.MinimalExample.WinForms
             browser.StatusMessage += OnBrowserStatusMessage;
             browser.TitleChanged += OnBrowserTitleChanged;
             browser.AddressChanged += OnBrowserAddressChanged;
+            browser.IsBrowserInitializedChanged += OnBrowserIsBrowserInitializedChanged;
 
             var bitness = Environment.Is64BitProcess ? "x64" : "x86";
             var version = String.Format("Chromium: {0}, CEF: {1}, CefSharp: {2}, Environment: {3}", Cef.ChromiumVersion, Cef.CefVersion, Cef.CefSharpVersion, bitness);
             DisplayOutput(version);
+        }
+
+        private async void OnBrowserIsBrowserInitializedChanged(object sender, IsBrowserInitializedChangedEventArgs e)
+        {
+            var cookieManager = Cef.GetGlobalCookieManager();
+            var success = await cookieManager.SetCookieAsync("http://localhost/Home.html", new Cookie
+            {
+                Name = "test" + DateTime.Now.Ticks,
+                Value = "test val " + DateTime.Now.ToString(),
+                Creation = DateTime.Now,
+                Expires = DateTime.Now.AddHours(1)
+            });
+
+            //await cookieManager.FlushStoreAsync();
+
+            var cookieVisitor = new ListCookieVisitor();
+            cookieManager.VisitAllCookies(cookieVisitor);
+
+            var cookies = await cookieVisitor.Task;
+
+            foreach (var cookie in cookies)
+            {
+                Console.WriteLine("Cookie Name:" + cookie);
+            }
         }
 
         private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs args)
