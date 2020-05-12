@@ -1,55 +1,36 @@
+using CefSharp.Handler;
+
 namespace CefSharp.MinimalExample.Wpf
 {
-    public class MinimalExampleResourceRequestHandler : IResourceRequestHandler
+    public class MinimalExampleResourceRequestHandler : ResourceRequestHandler
     {
-        public ICookieAccessFilter GetCookieAccessFilter(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
+        protected override ICookieAccessFilter GetCookieAccessFilter(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
         {
+            //The default is to allow send/save of all cookies
+            //You only need this if you need special handling on a per cookie basis
+            //Return null otherwise.
             var cookiesAccessFilter = new CookiesAccessFilter();
             return cookiesAccessFilter;
         }
 
-        public CefReturnValue OnBeforeResourceLoad(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback)
+        protected override CefReturnValue OnBeforeResourceLoad(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback)
         {
-            if (!callback.IsDisposed)
-            {
-                using (callback)
-                {
-                    callback.Continue(true);
-                    return CefReturnValue.ContinueAsync;
-                }
-            }
-
-            return CefReturnValue.Continue;
+            //if (!callback.IsDisposed)
+            //{
+            //    using (callback)
+            //    {
+            //        callback.Continue(true);
+            //        return CefReturnValue.ContinueAsync;
+            //    }
+            //}
+            return base.OnBeforeResourceLoad(chromiumWebBrowser, browser, frame, request, callback);
         }
 
-        public IResourceHandler GetResourceHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
-        {
-            return null;
-        }
-
-        public void OnResourceRedirect(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response, ref string newUrl)
-        {
-        }
-
-        public bool OnResourceResponse(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response)
-        {
-            return false;
-        }
-
-        public IResponseFilter GetResourceResponseFilter(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response)
+        protected override IResourceHandler GetResourceHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
         {
             return null;
         }
 
-        public void OnResourceLoadComplete(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IResponse response, UrlRequestStatus status, long receivedContentLength)
-        {
-            
-        }
-
-        public bool OnProtocolExecution(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request)
-        {
-            return false;
-        }
     }
 
     public class CookiesAccessFilter : ICookieAccessFilter
