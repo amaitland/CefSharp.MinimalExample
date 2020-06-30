@@ -29,6 +29,7 @@ namespace CefSharp.MinimalExample.WinForms
             browser.StatusMessage += OnBrowserStatusMessage;
             browser.TitleChanged += OnBrowserTitleChanged;
             browser.AddressChanged += OnBrowserAddressChanged;
+            browser.RequestHandler = new CustomRequestHandler();
 
             var version = string.Format("Chromium: {0}, CEF: {1}, CefSharp: {2}",
                Cef.ChromiumVersion, Cef.CefVersion, Cef.CefSharpVersion);
@@ -170,6 +171,36 @@ namespace CefSharp.MinimalExample.WinForms
         private void ShowDevToolsMenuItemClick(object sender, EventArgs e)
         {
             browser.ShowDevTools();
+        }
+    }
+
+    public class CustomResourceRequestHandler : CefSharp.Handler.ResourceRequestHandler
+    {
+        protected override CefReturnValue OnBeforeResourceLoad(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback)
+        {
+            //Set the header by name, override the existing value
+            request.SetHeaderByName("user-agent", "MyBrowser CefSharp Browser", true);
+
+            return CefReturnValue.Continue;
+        }
+    }
+
+    public class CustomRequestHandler : CefSharp.Handler.RequestHandler
+    {
+        protected override IResourceRequestHandler GetResourceRequestHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling)
+        {
+            return new CustomResourceRequestHandler();
+
+            //Where possible only intercept specific Url's
+            //Load https://www.whatismybrowser.com/detect/what-is-my-user-agent in the browser and you'll
+            //see our custom user agent
+            if (request.Url == "https://www.whatismybrowser.com/detect/what-is-my-user-agent")
+            {
+
+            }
+
+            //Default behaviour, url will be loaded normally.
+            return null;
         }
     }
 }
